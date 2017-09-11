@@ -9,7 +9,6 @@ float uT = 0.5;
 //用户设置的色饱和度
 uniform lowp float saturation;
 
-
  void main()
 {
     
@@ -24,25 +23,25 @@ uniform lowp float saturation;
     
       //二.浮雕
     
-    vec2 vST = coordinate;
-    ivec2 ires = ivec2(1920,1080);
-    float ResS = float( ires.s );
-    float ResT = float( ires.t );
-    //vec3 irgb = texture2D(videoframe,vST).rgb;
-    vec2 padding = vec2(1./ResS,0.);
-    vec3 current = texture2D(videoframe,vST).rgb;
-    vec3 next = texture2D(videoframe,vST + padding).rgb;
-    vec3 diffs = current-next;
-    float bigger = diffs.r;
-    if (abs(diffs.g)>abs(bigger)) {
-        bigger = diffs.g;
-    }
-    if (abs(diffs.b)>abs(bigger)) {
-        bigger = diffs.b;
-    }
-    float fLoat = clamp(bigger + .5 ,0.,1.);
-    vec3 rgb = vec3(fLoat,fLoat,fLoat);
-    gl_FragColor = vec4(rgb,1.);
+//    vec2 vST = coordinate;
+//    ivec2 ires = ivec2(1920,1080);
+//    float ResS = float( ires.s );
+//    float ResT = float( ires.t );
+//    //vec3 irgb = texture2D(videoframe,vST).rgb;
+//    vec2 padding = vec2(1./ResS,0.);
+//    vec3 current = texture2D(videoframe,vST).rgb;
+//    vec3 next = texture2D(videoframe,vST + padding).rgb;
+//    vec3 diffs = current-next;
+//    float bigger = diffs.r;
+//    if (abs(diffs.g)>abs(bigger)) {
+//        bigger = diffs.g;
+//    }
+//    if (abs(diffs.b)>abs(bigger)) {
+//        bigger = diffs.b;
+//    }
+//    float fLoat = clamp(bigger + .5 ,0.,1.);
+//    vec3 rgb = vec3(fLoat,fLoat,fLoat);
+//    gl_FragColor = vec4(rgb,1.);
     
     
     
@@ -76,7 +75,31 @@ uniform lowp float saturation;
 //    gl_FragColor = vec4(mix(greyScaleColor,color.rgb,saturation),color.w);
     
     
+      //六.索贝尔 (Sobel) 边界探测
+        vec2 vST = coordinate;
+        ivec2 ires = ivec2(1920,1080);
+        float ResS = float( ires.s );
+        float ResT = float( ires.t );
+        //vec3 irgb = texture2D(videoframe,vST).rgb;
+        vec2 paddingW = vec2(1./ResS,0.);
+        vec2 paddingH = vec2(0.,1./ResT);
+        float currentIntensity = texture2D(videoframe,vST).r;
+        float rightIntensity = texture2D(videoframe,vST + paddingW).r;
+        float leftIntensity  = texture2D(videoframe,vST - paddingW).r;
+        float bottomIntensity = texture2D(videoframe, vST-paddingH).r;
+        float topIntensity = texture2D(videoframe, vST+paddingH).r;
     
+    float bottomLeftIntensity = texture2D(videoframe, vST+paddingH-paddingW).r;
+    float topRightIntensity = texture2D(videoframe, vST-paddingH+paddingW).r;
+    float topLeftIntensity = texture2D(videoframe, vST-paddingH-paddingW).r;
+    float bottomRightIntensity = texture2D(videoframe, vST+paddingH+paddingW).r;
+    
+    float h = -bottomLeftIntensity - 2.0 * leftIntensity - topLeftIntensity + bottomRightIntensity + 2.0 * rightIntensity + topRightIntensity;
+    float v = -topLeftIntensity - 2.0 * topIntensity - topRightIntensity + bottomLeftIntensity + 2.0 * bottomIntensity + bottomRightIntensity;
+    float mag = length(vec2(h, v));
+    
+    gl_FragColor = vec4(vec3(mag), 1.0);
+   
     //七.倒置
     
 //    vec2 vST = coordinate;
