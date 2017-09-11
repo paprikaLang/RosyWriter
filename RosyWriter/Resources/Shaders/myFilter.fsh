@@ -99,6 +99,7 @@ uniform lowp float saturation;
     float mag = length(vec2(h, v));
     
     gl_FragColor = vec4(vec3(mag), 1.0);
+    
    
     //七.倒置
     
@@ -116,6 +117,60 @@ uniform lowp float saturation;
 //    gl_FragColor = vec4(mix(target,color.rgb,uT),1.);
     
     
+    //九.坎尼 (Canny) 边界探测
+//    vec2 vST = coordinate;
+//    ivec2 ires = ivec2(1920,1080);
+//    float ResS = float( ires.s );
+//    float ResT = float( ires.t );
+//    //vec3 irgb = texture2D(videoframe,vST).rgb;
+//    vec2 paddingW = vec2(1./ResS,0.);
+//    vec2 paddingH = vec2(0.,1./ResT);
+//    float currentIntensity = texture2D(videoframe,vST).r;
+//    float rightIntensity = texture2D(videoframe,vST + paddingW).r;
+//    float leftIntensity  = texture2D(videoframe,vST - paddingW).r;
+//    float bottomIntensity = texture2D(videoframe, vST-paddingH).r;
+//    float topIntensity = texture2D(videoframe, vST+paddingH).r;
+//    
+//    float bottomLeftIntensity = texture2D(videoframe, vST+paddingH-paddingW).r;
+//    float topRightIntensity = texture2D(videoframe, vST-paddingH+paddingW).r;
+//    float topLeftIntensity = texture2D(videoframe, vST-paddingH-paddingW).r;
+//    float bottomRightIntensity = texture2D(videoframe, vST+paddingH+paddingW).r;
+//    
+//    vec2 gradientDirection;
+//    gradientDirection.x = -bottomLeftIntensity - 2.0 * leftIntensity - topLeftIntensity + bottomRightIntensity + 2.0 * rightIntensity + topRightIntensity;
+//    gradientDirection.y = -topLeftIntensity - 2.0 * topIntensity - topRightIntensity + bottomLeftIntensity + 2.0 * bottomIntensity + bottomRightIntensity;
+//    
+//    float gradientMagnitude = length(gradientDirection);
+//    vec2 normalizedDirection = normalize(gradientDirection);
+//    normalizedDirection = sign(normalizedDirection) * floor(abs(normalizedDirection) + 0.617316); // Offset by 1-sin(pi/8) to set to 0 if near axis, 1 if away
+//    normalizedDirection = (normalizedDirection + 1.0) * 0.5; // Place -1.0 - 1.0 within 0 - 1.0
+//    
+//    gl_FragColor = vec4(gradientMagnitude, normalizedDirection.x, normalizedDirection.y, 1.0);
+//    
+    
+    
+    //十.
+//    vec2 vST = coordinate;
+//    ivec2 ires = ivec2(1920.,1080.);
+//    float ResS = float( ires.s );
+//    float ResT = float( ires.t );
+//    //vec3 irgb = texture2D(videoframe,vST).rgb;
+//    vec2 paddingW = vec2(1./ResS,0.);
+//    vec2 paddingH = vec2(0.,1./ResT);
+//
+//    vec3 currentGradientAndDirection = texture2D(videoframe, vST).rgb;
+//    vec2 gradientDirection = ((currentGradientAndDirection.gb * 2.0) - 1.0) * vec2(1./ResS, 1./ResT);
+//    
+//    float firstSampledGradientMagnitude = texture2D(videoframe, vST + gradientDirection).r;
+//    float secondSampledGradientMagnitude = texture2D(videoframe, vST - gradientDirection).r;
+//    
+//    float multiplier = step(firstSampledGradientMagnitude, currentGradientAndDirection.r);
+//    multiplier = multiplier * step(secondSampledGradientMagnitude, currentGradientAndDirection.r);
+//    
+//    float thresholdCompliance = smoothstep(0.1, 0.5, currentGradientAndDirection.r);
+//    multiplier = multiplier * thresholdCompliance;
+//    
+//    gl_FragColor = vec4(multiplier, multiplier, multiplier, 1.0);
 }
 
 
